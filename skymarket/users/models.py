@@ -1,8 +1,9 @@
-from django.contrib.auth.models import AbstractBaseUser, AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
-from .managers import UserManager
-from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
+from .managers import UserManager
 
 
 class UserRoles:
@@ -30,6 +31,10 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['first_name', 'last_name', 'phone']
 
     @property
+    def full_name(self):
+        return f'{self.first_name}, {self.last_name}'
+
+    @property
     def is_admin(self):
         return self.role == UserRoles.ADMIN
 
@@ -50,4 +55,3 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return self.is_admin
-
