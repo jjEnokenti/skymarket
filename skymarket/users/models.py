@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from django.db import models
-from users.managers import UserManager
+from .managers import UserManager
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.translation import gettext_lazy as _
 
@@ -17,11 +17,13 @@ class User(AbstractBaseUser):
     # TODO подробности также можно поискать в рекоммендациях к проекту
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
-    email = models.EmailField(unique=True, verbose_name='email address')
+    email = models.EmailField(_('email address'), unique=True)
     phone = PhoneNumberField()
     role = models.CharField(max_length=5, choices=UserRoles.ROLES, default=UserRoles.USER)
     image = models.ImageField(upload_to='user_media', blank=True, null=True)
     is_active = models.BooleanField(default=False)
+
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
 
@@ -29,7 +31,7 @@ class User(AbstractBaseUser):
 
     @property
     def is_admin(self):
-        return self.role == UserRoles.ADMIN  #
+        return self.role == UserRoles.ADMIN
 
     @property
     def is_user(self):
@@ -49,4 +51,3 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_admin
 
-    objects = UserManager()
