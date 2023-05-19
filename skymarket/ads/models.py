@@ -1,16 +1,13 @@
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 
-user = get_user_model()
 
 class Ad(models.Model):
-    # TODO добавьте поля модели здесь
     title = models.CharField(max_length=255)
     price = models.PositiveIntegerField()
     description = models.CharField(max_length=1000, blank=True, null=True)
-    author = models.ForeignKey(user, on_delete=models.CASCADE)
+    author = models.ForeignKey('users.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='ad_images', blank=True, null=True)
 
     class Meta:
         ordering = ('created_at',)
@@ -22,10 +19,9 @@ class Ad(models.Model):
 
 
 class Comment(models.Model):
-    # TODO добавьте поля модели здесь
     text = models.CharField(max_length=2000)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
-    author = models.ForeignKey(user, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey('users.User', on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

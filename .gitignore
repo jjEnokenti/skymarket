@@ -130,3 +130,10 @@ dmypy.json
 .DS_Store
 .idea/
 ./django_static
+
+pyproject.toml
+poetry.lock
+postgres_data
+frontend
+skymarket/django_media
+skymarket/django_static

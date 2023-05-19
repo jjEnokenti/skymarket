@@ -1,24 +1,27 @@
 from rest_framework import serializers
 
 from ads.models import Ad
-from users.serializers import AdUserSerializer
 
 
-# TODO Сериалайзеры. Предлагаем Вам такую структуру, однако вы вправе использовать свою
-
-
-class AdSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
+class AdListSerializer(serializers.ModelSerializer):
+    pk = serializers.ReadOnlyField(source='id')
 
     class Meta:
         model = Ad
-        exclude = ('created_at',)
+        exclude = ('created_at', 'id', 'author',)
 
 
-class AdDetailSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
-    author = AdUserSerializer()
+class AdDetailSerializer(AdListSerializer):
+    pk = serializers.ReadOnlyField(source='id')
+    phone = serializers.CharField(source='author.phone', read_only=True)
+    author_first_name = serializers.ReadOnlyField(source='author.first_name')
+    author_last_name = serializers.ReadOnlyField(source='author.last_name')
+    author_id = serializers.ReadOnlyField(source='author.pk')
 
-    class Meta:
-        model = Ad
-        fields = '__all__'
+
+class CreateAdSerializer(AdDetailSerializer):
+    pass
+
+
+class UpdateAdSerializer(CreateAdSerializer):
+    pass

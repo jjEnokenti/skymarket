@@ -7,21 +7,18 @@ from .managers import UserManager
 
 
 class UserRoles:
-    # TODO закончите enum-класс для пользователя
     USER = 'user'
     ADMIN = 'admin'
     ROLES = ((ADMIN, 'admin'), (USER, 'user'))
 
 
 class User(AbstractBaseUser):
-    # TODO переопределение пользователя.
-    # TODO подробности также можно поискать в рекоммендациях к проекту
-    first_name = models.CharField(max_length=40)
-    last_name = models.CharField(max_length=40)
+    first_name = models.CharField(_('first name'), max_length=40)
+    last_name = models.CharField(_('last name'), max_length=40)
     email = models.EmailField(_('email address'), unique=True)
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(_('phone number'))
     role = models.CharField(max_length=5, choices=UserRoles.ROLES, default=UserRoles.USER)
-    image = models.ImageField(upload_to='user_media', blank=True, null=True)
+    image = models.ImageField(upload_to='user_avatars', blank=True, null=True)
     is_active = models.BooleanField(default=False)
 
     objects = UserManager()

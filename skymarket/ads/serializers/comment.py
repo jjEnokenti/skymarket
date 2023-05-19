@@ -1,32 +1,33 @@
 from rest_framework import serializers
 
 from ads.models import Comment
-from users.serializers import CommentUserSerializer
 
 
 class CommentListSerializer(serializers.ModelSerializer):
-    # TODO сериалайзер для модели
+    pk = serializers.ReadOnlyField(source='id')
+    author_first_name = serializers.ReadOnlyField(source='author.first_name')
+    author_last_name = serializers.ReadOnlyField(source='author.last_name')
+    ad_id = serializers.ReadOnlyField(source='ad.id')
+    author_image = serializers.ImageField(source='author.image')
 
     class Meta:
         model = Comment
-        exclude = ('created_at',)
+        exclude = ('id', 'ad', 'author',)
 
 
 class CommentCreateSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
+    pk = serializers.ReadOnlyField(source='id')
+    author_first_name = serializers.ReadOnlyField(source='author.first_name')
+    author_last_name = serializers.ReadOnlyField(source='author.last_name')
+    ad_id = serializers.ReadOnlyField(source='ad.id')
 
     class Meta:
         model = Comment
-        fields = '__all__'
+        exclude = ('id', 'ad', 'author', 'created_at',)
 
 
-class CommentDetailSerializer(serializers.ModelSerializer):
-    ad = serializers.SlugRelatedField(slug_field='title', read_only=True)
-    author = CommentUserSerializer()
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
+class CommentDetailSerializer(CommentListSerializer):
+    pass
 
 
 class CommentUpdateSerializer(serializers.ModelSerializer):
