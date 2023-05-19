@@ -10,7 +10,7 @@ ads_router = SimpleRouter()
 ads_router.register('ads', AdViewSet)
 
 comment_router = NestedSimpleRouter(ads_router, 'ads', lookup='ad')
-comment_router.register('comments', CommentViewSet, basename='comments')
+comment_router.register('comments', CommentViewSet)
 
 urlpatterns = [
     path('', include(ads_router.urls)),

@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from ads.filters import AdFilter
 from ads.models import Ad
-from ads.permissions import CanEditOrDelete
+from ads.permissions import CanEditOrDeleteAd
 from ads.serializers.ad import (
     AdListSerializer,
     AdDetailSerializer,
@@ -67,8 +67,8 @@ class AdViewSet(viewsets.ModelViewSet):
         'me': [IsAuthenticated()],
         'create': [IsAuthenticated()],
         'retrieve': [IsAuthenticated()],
-        'partial_update': [IsAuthenticated(), CanEditOrDelete()],
-        'destroy': [IsAuthenticated(), CanEditOrDelete()],
+        'partial_update': [IsAuthenticated(), CanEditOrDeleteAd()],
+        'destroy': [IsAuthenticated(), CanEditOrDeleteAd()],
     }
 
     filter_backends = [DjangoFilterBackend]

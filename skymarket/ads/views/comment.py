@@ -4,7 +4,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from ads.models import Comment, Ad
-from ads.permissions import CanEditOrDelete
+from ads.permissions import CanEditOrDeleteComment
 from ads.serializers.comment import (
     CommentListSerializer,
     CommentDetailSerializer,
@@ -57,8 +57,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     default_permission = [IsAuthenticated()]
     permissions = {
-        'partial_update': [IsAuthenticated(), CanEditOrDelete()],
-        'destroy': [IsAuthenticated(), CanEditOrDelete()]
+        'partial_update': [IsAuthenticated(), CanEditOrDeleteComment()],
+        'destroy': [IsAuthenticated(), CanEditOrDeleteComment()]
     }
 
     def get_serializer_class(self):
