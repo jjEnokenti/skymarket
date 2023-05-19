@@ -103,6 +103,10 @@ SPECTACULAR_SETTINGS = {
 }
 
 DJOSER = {
+    'EMAIL': {
+        'password_reset': 'users.email.PasswordResetEmail',
+        'activation': 'users.email.CustomActivationEmail'
+    },
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserRegistrationSerializer',
         'current_user': 'users.serializers.CurrentUserSerializer',
@@ -110,9 +114,8 @@ DJOSER = {
 
     },
     'LOGIN_FIELD': 'email',
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
 }
 
