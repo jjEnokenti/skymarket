@@ -4,7 +4,9 @@ from ads.models import Ad
 
 
 class AdListSerializer(serializers.ModelSerializer):
-    pk = serializers.ReadOnlyField(source='id')
+    """Ad list serializer."""
+
+    pk = serializers.IntegerField(source='id')
 
     class Meta:
         model = Ad
@@ -12,16 +14,22 @@ class AdListSerializer(serializers.ModelSerializer):
 
 
 class AdDetailSerializer(AdListSerializer):
-    pk = serializers.ReadOnlyField(source='id')
+    """Ad detail serializer."""
+
+    pk = serializers.IntegerField(source='id', read_only=True)
     phone = serializers.CharField(source='author.phone', read_only=True)
     author_first_name = serializers.ReadOnlyField(source='author.first_name')
     author_last_name = serializers.ReadOnlyField(source='author.last_name')
-    author_id = serializers.ReadOnlyField(source='author.pk')
+    author_id = serializers.IntegerField(source='author.pk', read_only=True)
 
 
-class CreateAdSerializer(AdDetailSerializer):
+class AdCreateSerializer(AdDetailSerializer):
+    """Ad create serializer."""
+
     pass
 
 
-class UpdateAdSerializer(CreateAdSerializer):
+class AdUpdateSerializer(AdCreateSerializer):
+    """Ad update serializer."""
+
     pass

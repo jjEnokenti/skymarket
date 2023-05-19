@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import pagination, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -9,8 +10,8 @@ from ads.permissions import CanEditOrDelete
 from ads.serializers.ad import (
     AdListSerializer,
     AdDetailSerializer,
-    CreateAdSerializer,
-    UpdateAdSerializer
+    AdCreateSerializer,
+    AdUpdateSerializer
 )
 
 
@@ -18,15 +19,47 @@ class AdPagination(pagination.PageNumberPagination):
     page_size = 4
 
 
+@extend_schema_view(
+    list=extend_schema(
+        tags=['ads'],
+        responses=AdListSerializer,
+        description='Ads list view',
+        summary='ads list'
+    ),
+    retrieve=extend_schema(
+        tags=['ads'],
+        responses=AdDetailSerializer,
+        description='Ad detail view',
+        summary='ad detail'
+    ),
+    create=extend_schema(
+        tags=['ads'],
+        responses=AdCreateSerializer,
+        description='Ad create view',
+        summary='ad create'
+    ),
+    partial_update=extend_schema(
+        tags=['ads'],
+        responses=AdUpdateSerializer,
+        description='Ad partial update view',
+        summary='ad partial update'
+    ),
+    destroy=extend_schema(
+        tags=['ads'],
+        description='Ad delete view',
+        summary='ad delete'
+    ),
+)
 class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     pagination_class = AdPagination
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     default_serializer = AdListSerializer
     serializers = {
         'retrieve': AdDetailSerializer,
-        'create': CreateAdSerializer,
-        'partial_update': UpdateAdSerializer,
+        'create': AdCreateSerializer,
+        'partial_update': AdUpdateSerializer,
     }
 
     default_permission = [AllowAny()]
@@ -34,18 +67,12 @@ class AdViewSet(viewsets.ModelViewSet):
         'me': [IsAuthenticated()],
         'create': [IsAuthenticated()],
         'retrieve': [IsAuthenticated()],
-        'update': [IsAuthenticated(), CanEditOrDelete()],
         'partial_update': [IsAuthenticated(), CanEditOrDelete()],
         'destroy': [IsAuthenticated(), CanEditOrDelete()],
     }
 
     filter_backends = [DjangoFilterBackend]
     filterset_class = AdFilter
-
-    @action(detail=False)
-    def me(self, request, *args, **kwargs):
-        self.queryset = Ad.objects.filter(author=request.user)
-        return super().list(request, *args, **kwargs)
 
     def get_serializer_class(self):
         return self.serializers.get(self.action, self.default_serializer)
@@ -56,3 +83,13 @@ class AdViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         author_id = self.request.user.pk
         serializer.save(author_id=author_id)
+
+    @extend_schema(
+        tags=['ads'],
+        description='User ads list view',
+        summary='user ads list'
+    )
+    @action(methods=['get'], detail=False)
+    def me(self, request, *args, **kwargs):
+        self.queryset = Ad.objects.filter(author=request.user)
+        return super().list(request, *args, **kwargs)
