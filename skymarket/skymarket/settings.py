@@ -100,17 +100,18 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Skymarket API',
     'DESCRIPTION': 'Skymarket project',
     'VERSION': '0.1.0',
+    'SCHEMA_PATH_PREFIX': r'/api',
 }
 
 DJOSER = {
     'EMAIL': {
         'password_reset': 'users.email.PasswordResetEmail',
-        'activation': 'users.email.CustomActivationEmail'
+        'activation': 'users.email.CustomActivationEmail',
     },
     'SERIALIZERS': {
         'user_create': 'users.serializers.UserRegistrationSerializer',
         'current_user': 'users.serializers.CurrentUserSerializer',
-        'user_update': 'users.serializers.UserUpdateSerializer'
+        'user_update': 'users.serializers.UserUpdateSerializer',
 
     },
     'LOGIN_FIELD': 'email',
@@ -125,10 +126,10 @@ DJOSER = {
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.getenv('DB_NAME', 'skymarket'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
-        'USER': os.getenv('DB_USER', 'skymarket'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'skymarket'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
         'PORT': os.getenv('DB_PORT', '5432')
     }
 }

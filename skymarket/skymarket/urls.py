@@ -5,8 +5,6 @@ from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
-# TODO здесь необходимо подклюючит нужные нам urls к проекту
-
 urlpatterns = [
     path("api/admin/", admin.site.urls),
     path("api/redoc-tasks/", include("redoc.urls")),
